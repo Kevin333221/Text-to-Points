@@ -2,6 +2,7 @@ import pygame as pg
 from pygame import Vector2 as V
 import sys
 from colors import *
+from point import Point
 
 pg.init()
 pg.font.init()
@@ -11,6 +12,9 @@ SCREEN_HEIGHT = 800
 
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen.set_colorkey(BLACK)
+
+clock = pg.time.Clock()
+FPS = 60
 
 fontSize = 500
 myFont = pg.font.Font(None, fontSize)
@@ -41,13 +45,21 @@ def main():
 
     # Connecting the outline positions with the actual text positions
     outlines = [[(p[0] + text_pos.x, p[1] + text_pos.y) for p in points.outline(every=10)] for points in masks]
-
-
+    
+    point_list = list()
+    for points in outlines:
+        for p in points:
+            point_list.append(Point(p, 5))
 
     while True:
 
+        clock.tick(FPS)
         screen.fill(GRAY)
-        draw_points(outlines)
+
+        for point in point_list:
+            point.draw(screen)
+            point.seek_home()
+            point.update()
 
         for event in pg.event.get():
             if event.type == pg.QUIT:
