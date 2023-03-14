@@ -1,21 +1,13 @@
 import pygame as pg
 from pygame import Vector2 as V
 import sys
-import random
+from colors import *
 
 pg.init()
 pg.font.init()
 
 SCREEN_WIDTH = 1600
 SCREEN_HEIGHT = 800
-
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GRAY = (71, 71, 71)
-BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)
-PURPLE = (255, 0, 255)
-GREEN = (0, 255, 0)
 
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen.set_colorkey(BLACK)
@@ -27,6 +19,7 @@ def draw_points(outlines):
     for points in outlines:
             for p in points:
                 pg.draw.circle(screen, GREEN, p, 5)
+
 def main():
     mask_mode = 0
 
@@ -48,6 +41,8 @@ def main():
 
     # Connecting the outline positions with the actual text positions
     outlines = [[(p[0] + text_pos.x, p[1] + text_pos.y) for p in points.outline(every=10)] for points in masks]
+
+
 
     while True:
 
