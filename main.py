@@ -10,11 +10,13 @@ pg.font.init()
 SCREEN_WIDTH = 1600
 SCREEN_HEIGHT = 800
 
+POINT_EVERY = 20
+
 screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen.set_colorkey(BLACK)
 
-clock = pg.time.Clock()
 FPS = 60
+clock = pg.time.Clock()
 
 fontSize = 500
 myFont = pg.font.Font(None, fontSize)
@@ -31,6 +33,8 @@ def main():
     text = "ABCDE"
     surface_text = myFont.render(text, True, WHITE)
     
+    # surface_text = pg.image.load("Image/Cs_logo.png").convert_alpha()
+    
     # Gets the edges of the characters
     surface_text = pg.transform.laplacian(surface_text)
 
@@ -44,7 +48,7 @@ def main():
     masks = mask.connected_components()
 
     # Connecting the outline positions with the actual text positions
-    outlines = [[(p[0] + text_pos.x, p[1] + text_pos.y) for p in points.outline(every=10)] for points in masks]
+    outlines = [[(p[0] + text_pos.x, p[1] + text_pos.y) for p in points.outline(every=POINT_EVERY)] for points in masks]
     
     point_list = list()
     for points in outlines:
@@ -52,6 +56,8 @@ def main():
             point_list.append(Point(p, 5))
 
     while True:
+        
+        mx, my = pg.mouse.get_pos()
 
         clock.tick(FPS)
         screen.fill(GRAY)
@@ -59,6 +65,7 @@ def main():
         for point in point_list:
             point.draw(screen)
             point.seek_home()
+            point.flee(V(mx, my))
             point.update()
 
         for event in pg.event.get():
