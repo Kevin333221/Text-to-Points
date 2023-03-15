@@ -19,7 +19,10 @@ class Point:
         self.max_force = 0.8
 
     def draw(self, screen: pg.surface.Surface):
-        pg.draw.circle(screen, WHITE, self.pos, self.r)
+        if self.pos.distance_to(self.home) < 20:
+            pg.draw.circle(screen, WHITE, self.pos, self.r)
+        else:
+            pg.draw.circle(screen, RED, self.pos, self.r)
 
     def add_force(self, force: tuple, weight):
         self.acc += V(force) * self.max_force * weight
